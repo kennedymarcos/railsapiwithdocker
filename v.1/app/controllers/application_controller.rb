@@ -6,5 +6,4 @@ class ApplicationController < ActionController::API
     return if request.headers["Accept"] =~ /vnd\.api\+json/
     render :nothing => true, :status => 406
   end  
-  
 end
