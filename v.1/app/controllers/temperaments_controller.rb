@@ -48,6 +48,5 @@ class TemperamentsController < ApplicationController
     def temperament_params
       #params.require(:temperament).permit(:name)
       ActiveModelSerializers::Deserialization.jsonapi_parse!(params)
-      #ActiveModelSerializers::Deserealization.jsonapi_parse(params)
     end
 end
