@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  require "base64"
   before_action :set_item, only: %i[ show update destroy ]
 
   # GET /items
@@ -18,11 +19,19 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
 
-    picture = Paperclip.io_adapters.for(params[:picture]) 
+    new_params = item_params
+    base64_image =
+    File.open(new_params[:picture], "rb") do |file|
+      Base64.strict_encode64(file.read)
+    end
+
+    new_params[:picture] = 'data:image/png;base64,' + base64_image
+
+    picture = Paperclip.io_adapters.for(new_params[:picture]) 
     picture.original_filename = "ok.jpg"
     Item.create!(picture: picture)
 
-    @item = Item.new(item_params)
+    @item = Item.new(new_params)
 
 
     #binding.pry(item_params)
