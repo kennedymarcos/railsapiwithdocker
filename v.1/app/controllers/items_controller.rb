@@ -17,8 +17,15 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.json
   def create
+
+    picture = Paperclip.io_adapters.for(params[:picture]) 
+    picture.original_filename = "ok.jpg"
+    Item.create!(picture: picture)
+
     @item = Item.new(item_params)
 
+
+    #binding.pry(item_params)
     if @item.save
       render :show, status: :created, location: @item
     else
@@ -50,7 +57,7 @@ class ItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def item_params
-      #params.require(:item).permit(:name, :description, :picture)
-      ActiveModelSerializers::Deserialization.jsonapi_parse(params)
+      params.require(:item).permit(:name, :description, :picture)
+      #ActiveModelSerializers::Deserialization.jsonapi_parse(params)
     end
 end
