@@ -19,22 +19,18 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
 
-    new_params = item_params
-    base64_image =
-    File.open(new_params[:picture], "rb") do |file|
-      Base64.strict_encode64(file.read)
-    end
+    #base64
+    # base64_image =
+    # File.open(params[:picture], "rb") do |file|
+    #   Base64.strict_encode64(file.read)
+    # end
+    # params[:picture] = 'data:image/png;base64,' + base64_image
+    # picture = Paperclip.io_adapters.for(params[:picture]) 
+    # picture.original_filename = "ok.jpg"
+    # Item.create!(picture: picture)
 
-    new_params[:picture] = 'data:image/png;base64,' + base64_image
+    @item = Item.new(item_params)
 
-    picture = Paperclip.io_adapters.for(new_params[:picture]) 
-    picture.original_filename = "ok.jpg"
-    Item.create!(picture: picture)
-
-    @item = Item.new(new_params)
-
-
-    #binding.pry(item_params)
     if @item.save
       render :show, status: :created, location: @item
     else
@@ -66,7 +62,7 @@ class ItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def item_params
-      params.require(:item).permit(:name, :description, :picture)
+      params.require(:data).permit(:name, :description, :picture)
       #ActiveModelSerializers::Deserialization.jsonapi_parse(params)
     end
 end
